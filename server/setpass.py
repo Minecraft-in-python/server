@@ -11,7 +11,8 @@ def set_password():
     if sha256(p.encode()).hexdigest() != old:
         print('old password not correct')
         exit(1)
-    if (new := getpass('new password: ')) == getpass('confirm: '):
+    new = getpass('new password: ')
+    if new == getpass('confirm: '):
         save_password(new)
         print('set new password successfully')
         exit(0)

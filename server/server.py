@@ -61,14 +61,15 @@ class Server():
     def client(self, conn, addr):
         # 客户端连接
         log_info('new client thread')
-        if (player := self.connect_to_client(conn)) == False:
+        player = self.connect_to_client(conn)
+        if player == None:
             return
         conn.send('position {0}'.format(pos2str(self.player[player].position)).encode())
 
     def connect_to_client(self, conn):
         # 互换版本号
         # 发送: server {"version": VERSION}
-        conn.send('server {0}'.format(json.dumps({'version': VERSION})).encode())
+        conn.send('server {0}'.format(json.dumps({'version': VERSION['str']})).encode())
         version = conn.recv(1024).decode()
         # 期望接收到: client {"version": VERSION}
         if version.startswith('client '):
@@ -113,7 +114,7 @@ class Server():
     def console(self, conn, addr):
         # 控制台连接
         log_info('new console')
-        conn.send('Minecraft server version {0}'.format(VERSION).encode())
+        conn.send('Minecraft server version {0}'.format(VERSION['str']).encode())
         while True:
             data = conn.recv(1024).decode()
             if data == 'exit':
