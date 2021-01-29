@@ -142,6 +142,6 @@ class Server():
             elif data == 'threads':
                 conn.send('total {0} thread(s)'.format(self.thread_count + 1).encode())
             elif data == 'version' or data == 'ver':
-                conn.send('version {0}'.format(VERSION).encode())
+                conn.send('version {0}'.format(VERSION['str']).encode())
             else:
                 conn.send('command not found'.encode())

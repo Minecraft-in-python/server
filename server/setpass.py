@@ -21,6 +21,6 @@ def set_password():
         exit(1)
 
 def save_password(password):
-    data = json.load(open(join(path['mcpypath'], 'server.json')))
-    data['password'] = sha256(password.encode()).hexdigest()
+    data = json.load(open(join(path['mcpypath'], 'settings.json')))
+    data['server']['password'] = sha256(password.encode()).hexdigest()
     json.dump(data, open(join(path['mcpypath'], 'server.json'), 'w+'), indent='\t')

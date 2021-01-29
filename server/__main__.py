@@ -13,7 +13,7 @@ if __name__ == '__main__':
     elif len(argv) == 2 and argv[1] == 'setpass':
         setpass.set_password()
     elif len(argv) == 2 and argv[1] == 'help':
-        print('Minecraft server version %s' % VERSION)
+        print('Minecraft server version %s' % VERSION['str'])
         print('usage: python -m server <server|console|help>\n')
         print('arguments:')
         print('  server  - start a server(default)')
