@@ -46,6 +46,13 @@ class Server():
                         name='t{0}'.format(self.thread_count)))
                 log_info('new connection @ %s:%d, total %d thread(s)' % (addr[0], addr[1], self.thread_count + 1))
                 self.thread[self.thread_count].start()
+            elif data == 'get_info':
+                # 客户端获取服务器信息
+                self.thread_count += 1
+                self.thread.append(threading.Thread(target=self.get_info, args=(conn, addr),
+                        name='t{0}'.format(self.thread_count)))
+                log_info('client get_info @ %s:%d, total %d thread(s)' % (addr[0], addr[1], self.thread_count + 1))
+                self.thread[self.thread_count].start()
             elif data == 'console %s' % settings['password']:
                 # 控制台连接
                 if self.console_thread == None:
@@ -110,6 +117,14 @@ class Server():
             conn.send('refused'.encode())
             conn.close()
             return False
+
+    def get_info(self, conn, addr):
+        # 发送服务器信息
+        data = {}
+        data['long-desc'] = settings['long-desc']
+        data['short-desc'] = settings['short-desc']
+        data['time'] = time.time()
+        conn.send(json.dumps(data).encode())
 
     def console(self, conn, addr):
         # 控制台连接
