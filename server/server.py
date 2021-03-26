@@ -124,6 +124,7 @@ class Server():
         data['long-desc'] = settings['long-desc']
         data['short-desc'] = settings['short-desc']
         data['time'] = time.time()
+        data['version'] = VERSION
         conn.send(json.dumps(data).encode())
 
     def console(self, conn, addr):
