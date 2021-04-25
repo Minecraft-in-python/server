@@ -76,7 +76,7 @@ class Server():
     def connect_to_client(self, conn):
         # 互换版本号
         # 发送: server {"version": VERSION}
-        conn.send('server {0}'.format(json.dumps({'version': VERSION['str']})).encode())
+        conn.send('server {0}'.format(json.dumps({'version': VERSION['data']})).encode())
         version = conn.recv(1024).decode()
         # 期望接收到: client {"version": VERSION}
         if version.startswith('client '):
@@ -88,9 +88,12 @@ class Server():
                 conn.close()
                 return False
             else:
-                # 接收到正确版本
-                log_info('client version: %s' % client_ver)
-                conn.send('welcome'.encode())
+                # 接收到版本号
+                if client_ver == VERSION['data']:
+                    log_info('client version: %s' % client_ver)
+                    conn.send('welcome'.encode())
+                else:
+                    conn.send('refused'.encode( ))
         else:
             conn.send('refused'.encode())
             conn.close()
