@@ -4,18 +4,17 @@ from json import dump
 from os import path
 from sys import platform
 
-VERSION = '0.3.1'
+VERSION = '0.3.2'
 
 def install():
     # 安装
-    print('This is server %s installation script.')
+    print('This is server %s installation script.' % VERSION)
     input('Press ENTER to install server: ')
     file = path.join(search_mcpy(), 'server')
     data = {
-            'long-desc': 'description.long',
-            'short-desc': 'description.short',
-            'password': sha256('123'.encode()).hexdigest(),
-            'port': 16384
+            'description.long': 'description.long',
+            'description.short': 'description.short',
+            'port': 15425
             }
     dump(data, open(path.join(search_mcpy(), 'server.json'), 'w+'), indent='\t')
 

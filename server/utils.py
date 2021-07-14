@@ -1,6 +1,10 @@
+import atexit
+import os
 from sys import platform
 import time
 
+start_time = time.strftime('%Y-%m-%d_%H.%M.%S')
+log_str = list()
 _have_color = None
 try:
     from colorama import Fore, Style, init
@@ -12,6 +16,7 @@ else:
 
 def log_err(text):
     # 打印错误信息
+    log_str.append('[ERR  %s] %s' % (time.strftime('%H:%M:%S'), text))
     if _have_color:
         print('%s[ERR  %s]%s %s' % (Fore.RED, time.strftime('%H:%M:%S'), Style.RESET_ALL, text))
     else:
@@ -19,6 +24,7 @@ def log_err(text):
 
 def log_info(text):
     # 打印信息
+    log_str.append('[INFO %s] %s' % (time.strftime('%H:%M:%S'), text))
     if _have_color:
         print('%s[INFO %s]%s %s' % (Fore.GREEN, time.strftime('%H:%M:%S'), Style.RESET_ALL, text))
     else:
@@ -26,10 +32,20 @@ def log_info(text):
 
 def log_warn(text):
     # 打印警告信息
+    log_str.append('[WARN %s] %s' % (time.strftime('%H:%M:%S'), text))
     if _have_color:
         print('%s[WARN %s]%s %s' % (Fore.YELLOW, time.strftime('%H:%M:%S'), Style.RESET_ALL, text))
     else:
         print('[WARN %s] %s' % (time.strftime('%H:%M:%S'), text))
+
+@atexit.register
+def on_exit():
+    log_info("Save logs to 'log/server-%s.log'" % start_time)
+    log_info('Exit')
+    with open(os.path.join(search_mcpy(), 'log', 'server-%s.log' % start_time), 'w+') as log:
+        log.write('\n'.join(log_str))
+    with open(os.path.join(search_mcpy(), 'log', 'server-latest.log'), 'w+') as latest_log:
+        latest_log.write('\n'.join(log_str))
 
 def pos2str(position):
     # 将坐标转换为字符串
